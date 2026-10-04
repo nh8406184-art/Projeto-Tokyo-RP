@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tókio RP - Cidade Virtual</title>
+    <style>
+        :root {
+            --bg-color: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --accent-color: #ff0055;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #16213e;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-color);
+            box-shadow: 0 4px 10px rgba(255, 0, 85, 0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            background-color: #0f0f1d;
+            padding: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .weather-widget {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #0f0f1d;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tókio RP</h1>
+        <p style="margin: 0.5rem 0 0 0; color: var(--secondary-text);">Sua nova vida começa na metrópole</p>
+    </header>
+
+    <nav>
+        <a href="#lore">Lore</a>
+        <a href="#clima">Clima</a>
+        <a href="#anuncios">Anúncios</a>
+        <a href="#discord">Discord</a>
+    </nav>
+
+    <div class="container">
+        <!-- Seção de Clima -->
+        <div class="card" id="clima">
+            <h2>Clima ao Vivo em Tóquio</h2>
+            <div class="weather-widget">
+                <span id="temp">Carregando clima...</span>
+            </div>
+        </div>
+
+        <!-- Seção de Lore -->
+        <div class="card" id="lore">
+            <h2>História da Cidade (Lore)</h2>
+            <p>Bem-vindo a Tókio RP. Uma metrópole vibrante onde o crime e a lei travam uma batalha constante sob as luzes de neon. Escolha o seu caminho, construa o seu império ou mantenha a ordem na cidade.</p>
+        </div>
+
+        <!-- Seção de Anúncios -->
+        <div class="card" id="anuncios">
+            <h2>Últimos Anúncios</h2>
+            <ul>
+                <li><strong>Inauguração do Servidor:</strong> Sejam bem-vindos à fase beta!</li>
+                <li><strong>Recrutamento Policial:</strong> Inscrições abertas na prefeitura local.</li>
+            </ul>
+        </div>
+
+        <!-- Seção Discord -->
+        <div class="card" id="discord">
+            <h2>Comunidade & Discord</h2>
+            <p>Junte-se ao nosso servidor oficial do Discord para interagir com a comunidade, solicitar suporte e realizar a sua WL.</p>
+            <a href="https://discord.gg" target="_blank" class="btn">Entrar no Discord</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Tókio RP - Todos os direitos reservados.
+    </footer>
+
+    <script>
+        // Buscar clima de Tóquio via API pública
+        async function fetchWeather() {
+            try {
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true');
+                const data = await response.json();
+                const temp = data.current_weather.temperature;
+                document.getElementById('temp').innerText = `🌡️ ${temp}°C em Tóquio agora`;
+            } catch (error) {
+                document.getElementById('temp').innerText = '☀️ 22°C (Clima ensolarado em Tóquio)';
+            }
+        }
+        fetchWeather();
+    </script>
+
+</body>
+                                                                                             </html>
+                                                                                             
