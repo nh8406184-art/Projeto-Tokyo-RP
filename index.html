@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tokyo RP</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .mobile-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: 430px;
+      max-height: 932px;
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)), 
+                  url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 15px 20px 20px 20px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 5px;
+      z-index: 10;
+    }
+
+    .clock {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e60039;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .exit-btn {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Header Titles */
+    .header-text {
+      margin-top: 15px;
+    }
+
+    .japanese-sub {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .main-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 2px 0 4px 0;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Status Card */
+    .status-card {
+      background: rgba(40, 30, 30, 0.45);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      padding: 18px;
+      margin-top: 15px;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 600;
+    }
+
+    .online-indicator {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: #00ff66;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .player-count {
+      margin-top: 8px;
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .player-count span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* App Grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 15px;
+      margin-top: 25px;
+    }
+
+    .app-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+      transition: transform 0.1s ease;
+    }
+
+    .app-item:active {
+      transform: scale(0.92);
+    }
+
+    .app-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .app-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    /* Floating Action Button */
+    .fab-btn {
+      position: absolute;
+      bottom: 40px;
+      right: 25px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #e60039;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 6px 20px rgba(230, 0, 57, 0.5);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Footer Text */
+    .footer-nav {
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 5px;
+    }
+
+    /* Auth & App Overlays */
+    .auth-overlay, .app-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+      transition: opacity 0.3s ease;
+    }
+
+    .auth-card, .app-modal-card {
+      width: 100%;
+      max-height: 85%;
+      background: rgba(22, 20, 20, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 25px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .modal-header i {
+      font-size: 1.8rem;
+      color: #e60039;
+    }
+
+    .modal-header h3 {
+      font-size: 1.4rem;
+    }
+
+    .modal-body {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .auth-tabs {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 25px;
+      display: flex;
+      padding: 3px;
+      margin: 20px 0;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 22px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+    }
+
+    .auth-tab.active {
+      background: #e60039;
+      color: #fff;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-label {
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #e60039;
+      border: none;
+      border-radius: 22px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .auth-footer {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: center;
+      margin-top: 15px;
+      line-height: 1.4;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-screen">
+    
+    <!-- AUTH OVERLAY (LOGIN / SIGNUP) -->
+    <div class="auth-overlay" id="authOverlay">
+      <div class="auth-card">
+        <div class="japanese-sub">東京ロールプレイ</div>
+        <div class="main-title" style="font-size: 1.8rem;">Tokyo RP</div>
+        <p class="tagline" style="font-size: 0.8rem;">Entre com o seu ID de jogador para abrir o seu celular.</p>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabEntrar" onclick="switchAuthMode('login')">Entrar</button>
+          <button class="auth-tab" id="tabCriar" onclick="switchAuthMode('register')">Criar conta</button>
+        </div>
+
+        <form onsubmit="handleAuth(event)">
+          <div class="input-group">
+            <label class="input-label">ID DO JOGADOR</label>
+            <input type="text" class="input-field" placeholder="ex: yuki_tanaka" required id="userIdInput">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">SENHA</label>
+            <input type="password" class="input-field" placeholder="••••••" required>
+          </div>
+
+          <div class="input-group hidden" id="confirmPasswordGroup">
+            <label class="input-label">CONFIRMAR SENHA</label>
+            <input type="password" class="input-field" placeholder="••••••">
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="fa-solid fa-right-to-bracket"></i> <span id="submitBtnText">Entrar</span>
+          </button>
+        </form>
+
+        <p class="auth-footer">
+          A sua senha fica só com você. Cada ID abre apenas o próprio celular.
+        </p>
+      </div>
+    </div>
+
+    <!-- APP MODAL OVERLAY -->
+    <div class="app-modal-overlay hidden" id="appModal">
+      <div class="app-modal-card">
+        <button class="modal-close-btn" onclick="closeAppModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-header">
+          <i id="modalIcon" class="fa-solid fa-circle-info"></i>
+          <h3 id="modalTitle">Nome do App</h3>
+        </div>
+        <div class="modal-body" id="modalContent">
+          Conteúdo do aplicativo...
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN HOMESCREEN -->
+    <div>
+      <div class="top-bar">
+        <span class="clock" id="screenClock">19:51</span>
+        <div class="user-actions">
+          <div class="avatar-btn" id="userAvatar">J</div>
+          <button class="exit-btn" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</button>
+        </div>
+      </div>
+
+      <div class="header-text">
+        <div class="japanese-sub">東京ロールプレイ</div>
+        <div class="main-title">Tokyo RP</div>
+        <p class="tagline">O roleplay que nunca dorme.</p>
+      </div>
+
+      <div class="status-card">
+        <div class="status-header">
+          <span><span class="online-indicator"></span>SERVIDOR ONLINE</span>
+          <span>versão 2.4.1</span>
+        </div>
+        <div class="player-count">
+          342 <span>/ 500 jogadores</span>
+        </div>
+      </div>
+
+      <div class="app-grid">
+        <div class="app-item" onclick="openApp('Anúncios', 'fa-bullhorn', 'Bem-vindo ao canal oficial de Anúncios da cidade de Tokyo. Fique atento às atualizações da prefeitura, regras gerais e eventos especiais.')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #ff0055, #ff5500);">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <span class="app-label">Anúncios</span>
+        </div>
+
+        <div class="app-item" onclick="openApp('Notícias', 'fa-newspaper', '<strong>Jornal Tokyo Times</strong><br><br>• Novo evento de corridas clandestinas em Shibuya neste fim de semana.<br>• Polícia reforça a segurança na zona sul da cidade.<br>• Novos empregos disponíveis na agência de empregos.')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #ffaa00, #ff5500);">
+            <i class="fa-solid fa-newspaper"></i>
+          </div>
+          <span class="app-label">Notícias</span>
+        </div>
+
+        <div class="app-item" onclick="openApp('Chat', 'fa-comment', 'Nenhum canal de mensagem direta ativo no momento. Conecte-se à cidade para conversar em tempo real com outros moradores.')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #ff5533, #ff0055);">
+            <i class="fa-solid fa-comment"></i>
+          </div>
+          <span class="app-label">Chat</span>
+        </div>
+
+        <div class="app-item" onclick="openApp('Clima', 'fa-cloud-sun', '<strong>Previsão do Tempo - Tokyo</strong><br><br>🌡️ Temperatura: 18°C<br>🌧️ Condição: Chuva fraca noturna<br>💨 Vento: 12 km/h<br>📍 Visibilidade: Boa')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #ffcc00, #ff8800);">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <span class="app-label">Clima</span>
+        </div>
+
+        <div class="app-item" onclick="openApp('Tokyo GPS', 'fa-map-location-dot', '<strong>Locais Importantes:</strong><br><br>📍 Praça Central (Shinjuku)<br>📍 Hospital Geral de Tokyo<br>📍 Departamento de Polícia (PD)<br>📍 Concessionária Central')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #e60073, #9900cc);">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <span class="app-label">Tokyo</span>
+        </div>
+
+        <div class="app-item" onclick="openApp('Banco Mazuma', 'fa-wallet', '<strong>Sua Conta Bancária</strong><br><br>Saldo Banco: ¥ 150.000<br>Carteira: ¥ 2.500<br><br><i>Para realizar transferências PIX ou pagamentos, utilize o terminal bancário no jogo.</i>')">
+          <div class="app-icon" style="background: linear-gradient(135deg, #00cc88, #009966);">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <span class="app-label">Banco</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="fab-btn" onclick="openApp('Assistente Tokyo', 'fa-wand-magic-sparkles', 'Precisa de ajuda na cidade? Entre em contato com a nossa equipe de suporte ou suporte a whitelist através do fórum oficial.')">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+
+    <div class="footer-nav">
+      東京 • ROLEPLAY • TOQUE NOS APPS
+    </div>
+
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('screenClock').innerText = `${hours}:${minutes}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    let mode = 'login';
+
+    function switchAuthMode(targetMode) {
+      mode = targetMode;
+      const tabEntrar = document.getElementById('tabEntrar');
+      const tabCriar = document.getElementById('tabCriar');
+      const confirmGroup = document.getElementById('confirmPasswordGroup');
+      const submitBtnText = document.getElementById('submitBtnText');
+
+      if (mode === 'register') {
+        tabCriar.classList.add('active');
+        tabEntrar.classList.remove('active');
+        confirmGroup.classList.remove('hidden');
+        submitBtnText.innerText = 'Criar conta';
+      } else {
+        tabEntrar.classList.add('active');
+        tabCriar.classList.remove('active');
+        confirmGroup.classList.add('hidden');
+        submitBtnText.innerText = 'Entrar';
+      }
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const inputVal = document.getElementById('userIdInput').value;
+      if (inputVal) {
+        document.getElementById('userAvatar').innerText = inputVal.charAt(0).toUpperCase();
+      }
+      document.getElementById('authOverlay').classList.add('hidden');
+    }
+
+    function logout() {
+      document.getElementById('authOverlay').classList.remove('hidden');
+    }
+
+    function openApp(title, iconClass, content) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalIcon').className = `fa-solid ${iconClass}`;
+      document.getElementById('modalContent').innerHTML = content;
+      document.getElementById('appModal').classList.remove('hidden');
+    }
+
+    function closeAppModal() {
+      document.getElementById('appModal').classList.add('hidden');
+    }
+  </script>
+</body>
+        </html>
+        
