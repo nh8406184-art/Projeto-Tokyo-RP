@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tokyo RP - Mobile Interface</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-color: #08070c;
+      --card-bg: rgba(20, 18, 30, 0.75);
+      --neon-cyan: #00f3ff;
+      --neon-magenta: #ff0055;
+      --neon-purple: #9d00ff;
+      --text-main: #ffffff;
+      --text-dim: #a0a5c0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(255, 0, 85, 0.08) 0%, transparent 40%);
+    }
+
+    /* Mockup de Smartphone */
+    .phone-container {
+      width: 360px;
+      height: 740px;
+      background: #000;
+      border-radius: 45px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 0 30px rgba(0, 243, 255, 0.15),
+        0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ilha Dinâmica / Notch */
+    .phone-notch {
+      width: 120px;
+      height: 25px;
+      background: #000;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 20px;
+      z-index: 100;
+    }
+
+    /* Barra de Estado */
+    .status-bar {
+      height: 40px;
+      padding: 10px 25px 0 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 10;
+    }
+
+    /* Ecrã Principal do Telemóvel */
+    .phone-screen {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Widget de Estado TOKYO CITY (Discord Sync) */
+    .server-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 20px;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .server-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-purple));
+    }
+
+    .server-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .server-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--neon-cyan);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff88;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    .server-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .stat-val {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Grelha de Aplicações */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .app-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .app-icon:active {
+      transform: scale(0.9);
+    }
+
+    .icon-box {
+      width: 55px;
+      height: 55px;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .app-name {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Cores Personalizadas para Aplicações */
+    .app-icon[data-app="anuncios"] .icon-box { color: #ff9900; border-color: rgba(255, 153, 0, 0.3); }
+    .app-icon[data-app="noticias"] .icon-box { color: var(--neon-cyan); border-color: rgba(0, 243, 255, 0.3); }
+    .app-icon[data-app="chat"] .icon-box { color: #5865F2; border-color: rgba(88, 101, 242, 0.3); }
+    .app-icon[data-app="clima"] .icon-box { color: #00d2ff; border-color: rgba(0, 210, 255, 0.3); }
+    .app-icon[data-app="gps"] .icon-box { color: #ff0055; border-color: rgba(255, 0, 85, 0.3); }
+    .app-icon[data-app="banco"] .icon-box { color: #00ff88; border-color: rgba(0, 255, 136, 0.3); }
+    .app-icon[data-app="suporte"] .icon-box { color: var(--neon-purple); border-color: rgba(157, 0, 255, 0.3); }
+
+    /* Modal / Ecrã da Aplicação */
+    .app-modal {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-color);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+      padding: 50px 20px 20px 20px;
+    }
+
+    .app-modal.active {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      color: var(--neon-cyan);
+    }
+
+    .close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    /* Barra Home na parte inferior */
+    .home-bar {
+      width: 120px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <div class="phone-notch"></div>
+    
+    <!-- Barra de Estado -->
+    <div class="status-bar">
+      <span id="clock">12:00</span>
+      <div>
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi" style="margin: 0 4px;"></i>
+        <i class="fa-solid fa-battery-full"></i>
+      </div>
+    </div>
+
+    <!-- Ecrã Principal -->
+    <div class="phone-screen">
+      
+      <!-- Card de Servidor Conectado -->
+      <div class="server-card">
+        <div class="server-header">
+          <span class="server-title">TOKYO CITY</span>
+          <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>ONLINE</span>
+          </div>
+        </div>
+        <div class="server-stats">
+          <span>Jogadores: <span class="stat-val" id="player-count">--</span></span>
+          <span>Latência: <span class="stat-val" style="color: #00ff88;">15ms</span></span>
+        </div>
+      </div>
+
+      <!-- Aplicações -->
+      <div class="app-grid">
+        <div class="app-icon" data-app="anuncios" onclick="openApp('Anúncios', 'Fique atento aos comunicados oficiais da prefeitura e governadoria de Tóquio.')">
+          <div class="icon-box"><i class="fa-solid fa-bullhorn"></i></div>
+          <span class="app-name">Anúncios</span>
+        </div>
+
+        <div class="app-icon" data-app="noticias" onclick="openApp('Notícias', 'Últimas novidades e acontecimentos em tempo real na cidade de TOKYO CITY.')">
+          <div class="icon-box"><i class="fa-solid fa-newspaper"></i></div>
+          <span class="app-name">Notícias</span>
+        </div>
+
+        <div class="app-icon" data-app="chat" onclick="openApp('Discord Chat', 'Conectado diretamente com a comunidade TOKYO CITY.')">
+          <div class="icon-box"><i class="fa-brands fa-discord"></i></div>
+          <span class="app-name">Chat</span>
+        </div>
+
+        <div class="app-icon" data-app="clima" onclick="openApp('Clima', 'Previsão do Tempo: Ensolarado com pancadas de chuva de néon à noite. Temp: 24°C')">
+          <div class="icon-box"><i class="fa-solid fa-cloud-sun"></i></div>
+          <span class="app-name">Clima</span>
+        </div>
+
+        <div class="app-icon" data-app="gps" onclick="openApp('Tokyo GPS', 'Mapa interativo e rotas para pontos de interesse na cidade.')">
+          <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+          <span class="app-name">Tokyo GPS</span>
+        </div>
+
+        <div class="app-icon" data-app="banco" onclick="openApp('Maze Bank', 'Saldo Atual: R$ 125.000<br>Histórico de transações limpo.')">
+          <div class="icon-box"><i class="fa-solid fa-building-columns"></i></div>
+          <span class="app-name">Banco</span>
+        </div>
+
+        <div class="app-icon" data-app="suporte" onclick="openApp('Suporte', 'Precisa de ajuda no Roleplay? Abra um ticket diretamente no nosso Discord.')">
+          <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
+          <span class="app-name">Suporte</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal de Ecrã de App -->
+    <div class="app-modal" id="app-modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">App</span>
+        <button class="close-btn" onclick="closeApp()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        Conteúdo da Aplicação...
+      </div>
+    </div>
+
+    <div class="home-bar"></div>
+  </div>
+
+  <script>
+    // Relógio Digital
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').innerText = `${hours}:${minutes}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Funções de Controlo dos Apps
+    function openApp(title, content) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-body').innerHTML = content;
+      document.getElementById('app-modal').classList.add('active');
+    }
+
+    function closeApp() {
+      document.getElementById('app-modal').classList.remove('active');
+    }
+
+    // Integração Discord Widget API
+    const DISCORD_SERVER_ID = '1556401763769385100';
+
+    async function fetchDiscordStatus() {
+      try {
+        const res = await fetch(`https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`);
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('player-count').innerText = data.presence_count || '0';
+        } else {
+          document.getElementById('player-count').innerText = 'Ativo';
+        }
+      } catch (err) {
+        document.getElementById('player-count').innerText = 'Ativo';
+      }
+    }
+
+    fetchDiscordStatus();
+    setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30 segundos
+  </script>
+</body>
+</html>
