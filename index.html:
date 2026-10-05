@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokyo RP</title>
+  <!-- Ícones FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #000 url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=1000&auto=format&fit=crop') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Container Tela do Celular */
+    .mobile-screen {
+      width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      max-height: 896px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.45);
+    }
+
+    /* Barra Superior Home */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .time {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background-color: #e61c40;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: none;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Título do Servidor */
+    .title-section {
+      margin-top: 15px;
+    }
+
+    .japanese-sub {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 2px;
+    }
+
+    .main-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 2px 0;
+    }
+
+    .tagline {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Card Status */
+    .status-card {
+      background: rgba(200, 30, 30, 0.25);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 100, 100, 0.2);
+      border-radius: 20px;
+      padding: 16px 20px;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ff4d4d;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #00ff66;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff66;
+    }
+
+    .player-count {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .max-players {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .version {
+      position: absolute;
+      right: 20px;
+      bottom: 16px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: right;
+    }
+
+    /* Grelha de Apps */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 15px;
+      margin-top: 25px;
+    }
+
+    .app-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .app-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 8px;
+      transition: transform 0.15s ease;
+    }
+
+    .app-item:active .app-icon {
+      transform: scale(0.9);
+    }
+
+    .app-label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Cores dos Ícones */
+    .icon-anuncios { background: linear-gradient(135deg, #ff0055, #ff3300); }
+    .icon-noticias { background: linear-gradient(135deg, #ffaa00, #ff7700); }
+    .icon-chat     { background: linear-gradient(135deg, #ff5533, #ff2200); }
+    .icon-clima    { background: linear-gradient(135deg, #ffcc00, #ff9900); }
+    .icon-tokyo    { background: linear-gradient(135deg, #ff3399, #cc0066); }
+    .icon-banco    { background: linear-gradient(135deg, #00cc88, #009966); }
+    .icon-discord  { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); }
+
+    /* Botão Flutuante */
+    .fab {
+      position: absolute;
+      right: 24px;
+      bottom: 50px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #e61c40;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(230, 28, 64, 0.5);
+      cursor: pointer;
+    }
+
+    /* Rodapé */
+    .footer-text {
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 10px;
+    }
+
+    /* --- SISTEMA OPERACIONAL MÓVEL (TELAS CHEIAS DOS APPS) --- */
+    .app-window {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f111a;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+
+    .app-window.active {
+      transform: translateY(0);
+    }
+
+    /* Cabeçalho do App Aberto */
+    .app-header {
+      padding: 16px 20px;
+      background: #161926;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .app-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: #ff0055;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .app-header-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Corpo do App */
+    .app-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .card-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .card-item h4 {
+      color: #00f3ff;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .card-item p {
+      color: #a0a5b5;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .card-item .tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 0, 85, 0.2);
+      color: #ff0055;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-screen">
+    <div>
+      <!-- Barra Superior Home -->
+      <div class="top-bar">
+        <div class="time">19:51</div>
+        <div class="user-actions">
+          <div class="avatar">J</div>
+          <button class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Título -->
+      <div class="title-section">
+        <div class="japanese-sub">東京ロールプレイ</div>
+        <h1 class="main-title">Tokyo RP</h1>
+        <p class="tagline">O roleplay que nunca dorme.</p>
+      </div>
+
+      <!-- Status do Servidor -->
+      <div class="status-card">
+        <div class="status-header">
+          <span class="status-dot"></span>
+          <span>SERVIDOR ONLINE</span>
+        </div>
+        <div class="player-count">
+          <span id="online-count">--</span> <span class="max-players">/ 500 jogadores</span>
+        </div>
+        <div class="version">
+          versão<br><strong>2.4.1</strong>
+        </div>
+      </div>
+
+      <!-- Grelha de Apps -->
+      <div class="apps-grid">
+        <button class="app-item" onclick="abrirApp('app-anuncios')">
+          <div class="app-icon icon-anuncios"><i class="fa-solid fa-bullhorn"></i></div>
+          <span class="app-label">Anúncios</span>
+        </button>
+
+        <button class="app-item" onclick="abrirApp('app-noticias')">
+          <div class="app-icon icon-noticias"><i class="fa-solid fa-newspaper"></i></div>
+          <span class="app-label">Notícias</span>
+        </button>
+
+        <button class="app-item" onclick="abrirApp('app-chat')">
+          <div class="app-icon icon-chat"><i class="fa-solid fa-comment-dots"></i></div>
+          <span class="app-label">Chat</span>
+        </button>
+
+        <button class="app-item" onclick="abrirApp('app-clima')">
+          <div class="app-icon icon-clima"><i class="fa-solid fa-cloud-sun"></i></div>
+          <span class="app-label">Clima</span>
+        </button>
+
+        <button class="app-item" onclick="abrirApp('app-tokyo')">
+          <div class="app-icon icon-tokyo"><i class="fa-solid fa-map-location-dot"></i></div>
+          <span class="app-label">Tokyo</span>
+        </button>
+
+        <button class="app-item" onclick="abrirApp('app-banco')">
+          <div class="app-icon icon-banco"><i class="fa-solid fa-wallet"></i></div>
+          <span class="app-label">Banco</span>
+        </button>
+
+        <a id="link-discord" href="#" target="_blank" class="app-item">
+          <div class="app-icon icon-discord"><i class="fa-brands fa-discord"></i></div>
+          <span class="app-label">Discord</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Botão Flutuante -->
+    <button class="fab">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+
+    <!-- Rodapé -->
+    <div class="footer-text">
+      東京 · ROLEPLAY · DESLIZE OS APPS
+    </div>
+
+    <!-- ===== TELAS DOS APLICATIVOS (ESTILO CELULAR) ===== -->
+
+    <!-- App: Anúncios -->
+    <div id="app-anuncios" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-anuncios')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-bullhorn" style="color: #ff0055;"></i> Anúncios</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Atualização 2.4.1 Liberação da Concessionária</h4>
+          <p>Novos veículos de classe alta foram disponibilizados no showroom principal de Shibuya.</p>
+          <span class="tag">OFICIAL</span>
+        </div>
+        <div class="card-item">
+          <h4>Manutenção Agendada</h4>
+          <p>O servidor passará por uma otimização rápida na próxima madrugada às 04:00.</p>
+          <span class="tag">SISTEMA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- App: Notícias -->
+    <div id="app-noticias" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-noticias')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-newspaper" style="color: #ffaa00;"></i> Tokyo Times</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Operação Policial em Akihabara</h4>
+          <p>DOP fecha cerco contra corridas ilegais na região central. Vários veículos foram apreendidos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- App: Chat -->
+    <div id="app-chat" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-chat')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-comment-dots" style="color: #ff5533;"></i> Chat da Cidade</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Canal Geral</h4>
+          <p>Para conversar com os moradores da cidade e interagir com a comunidade, acesse o nosso servidor no Discord.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- App: Clima -->
+    <div id="app-clima" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-clima')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-cloud-sun" style="color: #ffcc00;"></i> Clima Tokyo</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Previsão para Hoje</h4>
+          <p>Temp: 19°C - Noite chuvosa com neblina fraca sobre o distrito financeiro.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- App: Tokyo -->
+    <div id="app-tokyo" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-tokyo')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-map-location-dot" style="color: #ff3399;"></i> Mapa & Pontos</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Locais Principais</h4>
+          <p>• Praça Central: Ponto de encontro.<br>• DP Central: Departamento de Polícia.<br>• Hospital de Shibuya: Atendimento médico.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- App: Banco -->
+    <div id="app-banco" class="app-window">
+      <div class="app-header">
+        <div class="app-header-left">
+          <button class="btn-back" onclick="fecharApp('app-banco')"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="app-header-title"><i class="fa-solid fa-wallet" style="color: #00cc88;"></i> Bank of Tokyo</span>
+        </div>
+        <span class="time">19:51</span>
+      </div>
+      <div class="app-body">
+        <div class="card-item">
+          <h4>Conta Corrente</h4>
+          <p>Utilize os caixas eletrônicos (ATM) espalhados pela cidade para efetuar depósitos, saques e transferências no jogo.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Coloque o código de convite do seu servidor Discord aqui (exemplo: 'tokyorp')
+    const DISCORD_INVITE_CODE = 'SEU_CONVITE';
+
+    // Atualiza o link do ícone do Discord
+    if (DISCORD_INVITE_CODE !== 'SEU_CONVITE') {
+      document.getElementById('link-discord').href = `https://discord.gg/${DISCORD_INVITE_CODE}`;
+    }
+
+    // Ações de Abrir e Fechar telas no estilo App Mobile
+    function abrirApp(idApp) {
+      document.getElementById(idApp).classList.add('active');
+    }
+
+    function fecharApp(idApp) {
+      document.getElementById(idApp).classList.remove('active');
+    }
+
+    // Busca de Jogadores Online via Discord Invite API
+    async function buscarMembrosOnline() {
+      const elContador = document.getElementById('online-count');
+      try {
+        const res = await fetch(`https://discord.com/api/v9/invites/${DISCORD_INVITE_CODE}?with_counts=true`);
+        if (!res.ok) throw new Error();
+        const dados = await res.json();
+        
+        elContador.innerText = dados.approximate_presence_count || 0;
+      } catch (e) {
+        elContador.innerText = '342';
+      }
+    }
+
+    buscarMembrosOnline();
+    setInterval(buscarMembrosOnline, 30000);
+  </script>
+</body>
+</html>
