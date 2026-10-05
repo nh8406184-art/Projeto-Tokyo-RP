@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOKYO CITY RP - Mobile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0d0e12;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 10px;
+    }
+
+    /* Container do Mockup do Celular */
+    .phone-container {
+      width: 100%;
+      max-width: 380px;
+      height: 720px;
+      background: #18191c;
+      border-radius: 40px;
+      border: 8px solid #2f3136;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Topo do Celular (Barra de Status) */
+    .phone-header {
+      background: #202225;
+      padding: 15px 20px;
+      text-align: center;
+      border-bottom: 1px solid #2f3136;
+    }
+
+    .phone-header h2 {
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: #5865f2;
+    }
+
+    /* Widget do Discord */
+    .discord-widget {
+      background: rgba(88, 101, 242, 0.1);
+      border: 1px solid rgba(88, 101, 242, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #43b581;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    /* Conteúdo Principal */
+    .content {
+      flex: 1;
+      padding: 0 15px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #b9bbbe;
+      margin: 15px 0 10px 5px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Cards de Anúncios */
+    .card-anuncio {
+      background: #2f3136;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 4px solid #5865f2;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #a3a6aa;
+      margin-bottom: 6px;
+    }
+
+    .card-header strong {
+      color: #fff;
+    }
+
+    .card-body {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: #dcddde;
+    }
+
+    /* Grid de Aplicativos */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 10px 5px;
+    }
+
+    .app-icon {
+      background: #2f3136;
+      border-radius: 16px;
+      padding: 15px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .app-icon:active {
+      transform: scale(0.95);
+      background: #393c43;
+    }
+
+    .app-icon span {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .app-icon p {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <!-- Topo -->
+    <div class="phone-header">
+      <h2>TOKYO CITY RP</h2>
+    </div>
+
+    <!-- Widget do Servidor Discord -->
+    <div class="discord-widget">
+      <div>
+        <div style="font-weight: bold; font-size: 0.9rem;">Servidor Discord</div>
+        <div style="font-size: 0.75rem; color: #b9bbbe;">
+          <span class="status-dot"></span>Online
+        </div>
+      </div>
+      <a href="https://discord.gg" target="_blank" style="background: #5865f2; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold;">Entrar</a>
+    </div>
+
+    <!-- Área de Conteúdo Scrollável -->
+    <div class="content">
+      
+      <!-- Seção de Anúncios -->
+      <div class="section-title">Anúncios Recentes</div>
+      <div id="lista-anuncios">
+        <!-- Os anúncios serão inseridos aqui pelo JavaScript -->
+      </div>
+
+      <!-- Seção de Aplicativos -->
+      <div class="section-title">Navegação</div>
+      <div class="apps-grid">
+        <a href="#" class="app-icon">
+          <span>📢</span>
+          <p>Avisos</p>
+        </a>
+        <a href="#" class="app-icon">
+          <span>📰</span>
+          <p>Notícias</p>
+        </a>
+        <a href="#" class="app-icon">
+          <span>🎧</span>
+          <p>Suporte</p>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript para carregar os dados -->
+  <script>
+    // Lista de anúncios (Simulando o canal do Discord)
+    const anunciosDiscord = [
+      {
+        autor: "ADMINISTRAÇÃO",
+        data: "Hoje às 15:00",
+        mensagem: "Bem-vindo ao aplicativo oficial da cidade TOKYO CITY!"
+      },
+      {
+        autor: "PREFEITURA",
+        data: "Ontem às 20:30",
+        mensagem: "Manutenção programada no servidor realizada com sucesso."
+      }
+    ];
+
+    function carregarAnuncios() {
+      const conteiner = document.getElementById('lista-anuncios');
+      if (!conteiner) return;
+
+      let html = '';
+      anunciosDiscord.forEach(item => {
+        html += `
+          <div class="card-anuncio">
+            <div class="card-header">
+              <strong>${item.autor}</strong>
+              <span>${item.data}</span>
+            </div>
+            <div class="card-body">
+              ${item.mensagem}
+            </div>
+          </div>
+        `;
+      });
+
+      conteiner.innerHTML = html;
+    }
+
+    // Executa ao carregar a página
+    document.addEventListener('DOMContentLoaded', carregarAnuncios);
+  </script>
+</body>
+</html>
